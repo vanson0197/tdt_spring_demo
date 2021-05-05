@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface IPersonService {
     List<PersonDTO> getAll();
+    PersonDTO findById(int id);
+    PersonDTO save(PersonDTO personDTO);
 }

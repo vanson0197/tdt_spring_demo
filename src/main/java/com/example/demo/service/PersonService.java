@@ -24,10 +24,31 @@ public class PersonService implements IPersonService {
     public List<PersonDTO> getAll() {
         List<PersonDTO> result = new ArrayList<>();
         List<PersonEntity> list1 = personReponsitory.findAll();
-        for(PersonEntity item : list1){
+        for (PersonEntity item : list1) {
             PersonDTO personDTO = personConverter.toDTO(item);
             result.add(personDTO);
         }
         return result;
     }
+
+    @Override
+    public PersonDTO findById(int id) {
+        PersonEntity personEntity = personReponsitory.findById(id);
+        return personConverter.toDTO(personEntity);
+    }
+
+    @Override
+    public PersonDTO save(PersonDTO personDTO) {
+        PersonEntity personEntity;
+        if (personDTO.getId() != 0) {
+            PersonEntity oldPersonEntity = personReponsitory.findById(personDTO.getId());
+            personEntity = personConverter.toEntity(personDTO, oldPersonEntity);
+        } else
+            personEntity = personConverter.toEntity(personDTO);
+
+        personEntity = personReponsitory.save(personEntity);
+        return personDTO;
+    }
+
+
 }

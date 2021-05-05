@@ -28,7 +28,6 @@ public class PersonDBConfig {
     private Environment env;
 
 
-
     @Bean
     public LocalContainerEntityManagerFactoryBean personEntityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();

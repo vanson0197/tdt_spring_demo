@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PersonReponsitory extends JpaRepository<PersonEntity, Integer> {
+    PersonEntity findById(int id);
 
 }
