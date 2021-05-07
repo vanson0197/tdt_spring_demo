@@ -26,15 +26,17 @@ public class PersonController {
     @GetMapping("/get/persons")
     public ResponseEntity<List<PersonDTO>> getPersons(@RequestParam(value = "page", required = false) Integer page,
                                                       @RequestParam(value = "limit", defaultValue = "3", required = false) Integer limit) {
-        List<PersonDTO> result = new ArrayList<>();
+        List<PersonDTO> result;
         if (page != null) {
             int page1 = page - 1;
             Pageable pageable = PageRequest.of(page1, limit);
             result = personService.getAll(pageable);
         } else
             result = personService.getAll();
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
 
     @PostMapping("/post/person")
     public ResponseEntity<PersonDTO> addPersons(@Valid @RequestBody PersonDTO personDTO) {
@@ -53,13 +55,13 @@ public class PersonController {
     }
 
     @PutMapping("/put/{id}")
-    public  ResponseEntity<PersonDTO> putPerSon(@PathVariable(value = "id") Integer id, @Valid @RequestBody PersonDTO personDTO){
+    public ResponseEntity<PersonDTO> putPerSon(@PathVariable(value = "id") Integer id, @Valid @RequestBody PersonDTO personDTO) {
         PersonDTO personDTO1 = personService.findById(id);
-        if(personDTO1.getId() == 0) {
+        if (personDTO1.getId() == 0) {
             throw new RecordNotFoundException("Not found person with id = " + id);
-        }else
+        } else
             personDTO.setId(id);
-            personService.save(personDTO);
-            return new ResponseEntity<>(personDTO, HttpStatus.OK);
+        personService.save(personDTO);
+        return new ResponseEntity<>(personDTO, HttpStatus.OK);
     }
 }

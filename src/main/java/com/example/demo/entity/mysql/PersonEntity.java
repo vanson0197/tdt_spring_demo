@@ -1,11 +1,14 @@
-package com.example.demo.entity.student;
-import lombok.Data;
+package com.example.demo.entity.mysql;
+
+import lombok.*;
+
+
 import javax.persistence.*;
 
-@Data
 @Entity
-@Table(name = "student")
-public class StudentEntity {
+@Data
+@Table(name = "person")
+public class PersonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -18,5 +21,7 @@ public class StudentEntity {
 
     @Column(name = "address", length = 50)
     private String address;
+
+
 
 }

@@ -12,4 +12,5 @@ public interface IPersonService {
     PersonDTO findById(int id);
     PersonDTO save(PersonDTO personDTO);
     void deleteById(int id);
+    List<PersonDTO> findByName(String name);
 }

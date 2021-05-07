@@ -1,14 +1,11 @@
-package com.example.demo.entity.person;
-
-import lombok.*;
-
-
+package com.example.demo.entity.postgres;
+import lombok.Data;
 import javax.persistence.*;
 
-@Entity
 @Data
-@Table(name = "person")
-public class PersonEntity {
+@Entity
+@Table(name = "student")
+public class StudentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

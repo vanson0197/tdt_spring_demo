@@ -1,7 +1,7 @@
 package com.example.demo.converter;
 
 import com.example.demo.dto.StudentDTO;
-import com.example.demo.entity.student.StudentEntity;
+import com.example.demo.entity.postgres.StudentEntity;
 import org.springframework.stereotype.Component;
 
 @Component

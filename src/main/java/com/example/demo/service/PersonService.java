@@ -1,19 +1,18 @@
 package com.example.demo.service;
 
 import com.example.demo.converter.PersonConverter;
-import com.example.demo.person.dao.PersonReponsitory;
+import com.example.demo.dao.mysql.dao.PersonReponsitory;
 import com.example.demo.dto.PersonDTO;
-import com.example.demo.entity.person.PersonEntity;
+import com.example.demo.entity.mysql.PersonEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.data.domain.Pageable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional("personTransactionManager")
 public class PersonService implements IPersonService {
     @Autowired
     private PersonReponsitory personReponsitory;
@@ -23,34 +22,38 @@ public class PersonService implements IPersonService {
 
     @Override
     public List<PersonDTO> getAll() {
-        List<PersonDTO> result = new ArrayList<>();
-        List<PersonEntity> list1 = personReponsitory.findAll();
-        for (PersonEntity item : list1) {
-            PersonDTO personDTO = personConverter.toDTO(item);
-            result.add(personDTO);
+        List<PersonDTO> personDTOList = new ArrayList<>();
+        List<PersonEntity> personEntityList = personReponsitory.findAll();
+
+        for (PersonEntity personEntity : personEntityList) {
+            personDTOList.add(personConverter.toPersonDTO(personEntity));
         }
-        return result;
+
+        return personDTOList;
     }
 
     @Override
     public List<PersonDTO> getAll(Pageable pageable) {
-         List<PersonDTO> result = new ArrayList<>();
-         List<PersonEntity> list1 = personReponsitory.findAll(pageable).getContent();
-         for(PersonEntity personEntity: list1){
-             PersonDTO personDTO = personConverter.toDTO(personEntity);
-             result.add(personDTO);
-         }
-         return result;
+        List<PersonDTO> result = new ArrayList<>();
+        List<PersonEntity> personEntityList = personReponsitory.findAll(pageable).getContent();
+
+        for (PersonEntity personEntity : personEntityList) {
+            PersonDTO personDTO = personConverter.toPersonDTO(personEntity);
+            result.add(personDTO);
+        }
+
+        return result;
     }
 
     @Override
     public PersonDTO findById(int id) {
         PersonEntity personEntity = personReponsitory.findById(id);
-        if(personEntity != null){
-            return personConverter.toDTO(personEntity);
-        }else
+        if (personEntity != null) {
+            return personConverter.toPersonDTO(personEntity);
+        } else
             return new PersonDTO();
     }
+
 
     @Override
     public PersonDTO save(PersonDTO personDTO) {
@@ -59,7 +62,7 @@ public class PersonService implements IPersonService {
             PersonEntity oldPersonEntity = personReponsitory.findById(personDTO.getId());
             personEntity = personConverter.toEntity(personDTO, oldPersonEntity);
         } else
-            personEntity = personConverter.toEntity(personDTO);
+            personEntity = personConverter.toPersonEntity(personDTO);
 
         personReponsitory.save(personEntity);
         return personDTO;
@@ -68,6 +71,17 @@ public class PersonService implements IPersonService {
     @Override
     public void deleteById(int id) {
         personReponsitory.deleteById(id);
+    }
+
+    @Override
+    public List<PersonDTO> findByName(String name) {
+        List<PersonEntity> listPersonEntity = personReponsitory.findByName(name);
+        List<PersonDTO> result = new ArrayList<>();
+        for (PersonEntity personEntity : listPersonEntity) {
+            PersonDTO personDTO = personConverter.toPersonDTO(personEntity);
+            result.add(personDTO);
+        }
+        return result;
     }
 
 

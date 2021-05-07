@@ -1,13 +1,9 @@
-package com.example.demo.config;
+package com.example.demo.dbconfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -18,30 +14,29 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.HashMap;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(entityManagerFactoryRef = "studentEntityManagerFactory", transactionManagerRef = "studentTransactionManager", basePackages = {
-        "com.example.demo.student.dao"})
-public class StudentDBConfig {
+@EnableJpaRepositories(entityManagerFactoryRef = "postgresEntityManagerFactory", transactionManagerRef = "postgresTransactionManager", basePackages = {
+        "com.example.demo.dao.postgres.dao"})
+public class PostgresDBConfig {
     @Autowired
     private Environment env;
 
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean studentEntityManagerFactory() {
+    public LocalContainerEntityManagerFactoryBean postgresEntityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(studentDataSource());
-        em.setPackagesToScan("com.example.demo.entity.student");
+        em.setDataSource(postgresDataSource());
+        em.setPackagesToScan("com.example.demo.entity.postgres");
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
         HashMap<String, Object> properties = new HashMap<String, Object>();
-        properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-        properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+        properties.put("hibernate.hbm2ddl.auto", env.getProperty("spring.data.jpa.hibernate.ddl-auto"));
+        properties.put("hibernate.dialect", env.getProperty("spring.jpa.database-platform"));
         em.setJpaPropertyMap(properties);
 
         return em;
@@ -49,22 +44,22 @@ public class StudentDBConfig {
 
 
     @Bean
-    @ConfigurationProperties(prefix="postgres")
-    public DataSource studentDataSource() {
+    @ConfigurationProperties(prefix="spring.postgres")
+    public DataSource postgresDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(env.getProperty("postgres.datasource.driver-class-name"));
-        dataSource.setUrl(env.getProperty("postgres.datasource.url"));
-        dataSource.setUsername(env.getProperty("postgres.datasource.username"));
-        dataSource.setPassword(env.getProperty("postgres.datasource.password"));
+        dataSource.setDriverClassName(env.getProperty("spring.postgres.datasource.driver-class-name"));
+        dataSource.setUrl(env.getProperty("spring.postgres.datasource.url"));
+        dataSource.setUsername(env.getProperty("spring.postgres.datasource.username"));
+        dataSource.setPassword(env.getProperty("spring.postgres.datasource.password"));
 
         return  dataSource;
     }
 
 
     @Bean
-    public PlatformTransactionManager studentTransactionManager() {
+    public PlatformTransactionManager postgresTransactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(studentEntityManagerFactory().getObject());
+        transactionManager.setEntityManagerFactory(postgresEntityManagerFactory().getObject());
         return transactionManager;
     }
 

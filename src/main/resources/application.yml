@@ -1,35 +1,32 @@
-# --- connect to mysql ---
-
-mysql:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/test1?useSSL=false
-    username: root
-    password: 1234
-  jpa:
-      hibernate:
-        ddl-auto: update
-      show-sql: true
-      properties:
-        hibernate: dialect:org.hibernate.dialect.MySQL5Dialect
-
-
-# --- connect to postgres ---
-postgres:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: 1234
-    url: jdbc:postgresql://localhost:5432/Test1
-    platform: postgres
-    initialization-mode: always
-    continue-on-error: true
-  jpa:
-    show-sql: true
-    generate-ddl: true
-    hibernate:
-      database: postgresql
-
-
-server:
-  port: 8082
+## --- connect to mysql ---
+#spring.mysql:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/test1?useSSL=false
+#    username: root
+#    password: 1234
+#
+#
+#
+## --- connect to postgres ---
+#spring.postgres:
+#  datasource:
+#    driver-class-name: org.postgresql.Driver
+#    username: postgres
+#    password: 1234
+#    url: jdbc:postgresql://localhost:5432/Test1
+#    platform: postgres
+#    initialization-mode: always
+#    continue-on-error: true
+#
+#
+#spring:
+#  jpa:
+#    hibernate.ddl-auto: create
+#    generate-ddl: true
+#    show-sql: true
+#    properties:
+#      hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+#
+#server:
+#  port: 8081

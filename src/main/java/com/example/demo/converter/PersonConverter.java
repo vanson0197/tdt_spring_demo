@@ -1,12 +1,12 @@
 package com.example.demo.converter;
 
 import com.example.demo.dto.PersonDTO;
-import com.example.demo.entity.person.PersonEntity;
+import com.example.demo.entity.mysql.PersonEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PersonConverter {
-    public PersonDTO toDTO(PersonEntity personEntity) {
+    public PersonDTO toPersonDTO(PersonEntity personEntity) {
         PersonDTO personDTO = new PersonDTO();
         personDTO.setId(personEntity.getId());
         personDTO.setName(personEntity.getName());
@@ -15,7 +15,7 @@ public class PersonConverter {
         return personDTO;
     }
 
-    public PersonEntity toEntity(PersonDTO personDTO) {
+    public PersonEntity toPersonEntity(PersonDTO personDTO) {
         PersonEntity personEntity = new PersonEntity();
         personEntity.setName(personDTO.getName());
         personEntity.setAge(personDTO.getAge());
